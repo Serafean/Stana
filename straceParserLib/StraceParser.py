@@ -79,7 +79,9 @@ class StraceParser:
             It use peek() on the reader so it will not abvance the position of
             the stream.
         """
-        buf = reader.buffer.peek(4096);
+        pos = reader.tell()
+        buf = reader.read(4096);
+        reader.seek(pos)
 
         failCount = 0
         for line in buf.split('\n'):
