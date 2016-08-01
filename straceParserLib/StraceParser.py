@@ -195,14 +195,19 @@ class StraceParser:
             #print line
             result = self._parseLine(line, straceOptions)
 
+            raw_called_functions = set()
             # hook here for every (raw) syscalls
             if result:
                 if result["syscall"] in self._rawSyscallCallbackHook:
                     for func in self._rawSyscallCallbackHook[result["syscall"]]:
-                        func(result)
+                        if func not in raw_called_functions:
+                            raw_called_functions.add(func)
+                            func(result)
                 if "ALL" in self._rawSyscallCallbackHook:
                     for func in self._rawSyscallCallbackHook["ALL"]:
-                        func(result)
+                        if func not in raw_called_functions:
+                            raw_called_functions.add(func)
+                            func(result)
 
             # determine if there is a completeSyscallResult
             if unfinishedSyscall:
@@ -212,14 +217,19 @@ class StraceParser:
             else:   # normal completed syscall
                 completeSyscallResult = result
 
+            called_functions = set()
             # hook here for every completed syscalls:
             if completeSyscallResult:
                 if completeSyscallResult["syscall"] in self._completeSyscallCallbackHook:
                     for func in self._completeSyscallCallbackHook[completeSyscallResult["syscall"]]:
-                        func(completeSyscallResult)
+                        if func not in called_functions:
+                            called_functions.add(func)
+                            func(completeSyscallResult)
                 if "ALL" in self._completeSyscallCallbackHook:
                     for func in self._completeSyscallCallbackHook["ALL"]:
-                        func(completeSyscallResult)
+                        if func not in called_functions:
+                            called_functions.add(func)
+                            func(completeSyscallResult)
 
         return 
 
