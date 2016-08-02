@@ -291,7 +291,7 @@ class StraceParser:
                 #return result
                 ### Ignore signal line now
                 return 
-            
+
             # If it is unfinished/resumed syscall, still parse it but let the
             # caller (_parse) determine what to do
             if "<unfinished ...>" in remainLine:
@@ -324,18 +324,18 @@ class StraceParser:
 
         except AttributeError:
             logging.warning("_parseLine: Error parsing this line: " + line)
-            print sys.exc_info()
-            #exctype, value, t = sys.exc_info()
-            #print traceback.print_exc()
-            #print sys.exc_info()
-            return 
-            
+            print(sys.exc_info())
+            # exctype, value, t = sys.exc_info()
+            # print traceback.print_exc()
+            # print sys.exc_info()
+            return
+
         return result
 
     def _countPrecedingBackslashes(self, s, pos):
         initialPos = pos
         while pos > 0 and s[pos-1] == '\\':
-            pos-=1
+            pos -= 1
         return (initialPos-pos)
 
     def _parseStringArg(self, argString):
@@ -380,7 +380,7 @@ class StraceParser:
                 searchEndSymbolStartAt = endSymbolIndex + 1
             else:
                 break
-        return ( argString[0:endSymbolIndex+1], argString[endSymbolIndex+1:] )
+        return(argString[0:endSymbolIndex+1], argString[endSymbolIndex+1:])
 
     def _parseBlockArg(self, argString, parseBlock=False):
         """
@@ -413,18 +413,18 @@ class StraceParser:
         >>> parser._parseBlockArg('[[["[[]]"]]]')
         ([[[['"[[]]"']]]], '')
         """
-        endSymbols = {'{':'}', '[':']', '"':'"'}
+        endSymbols = {'{': '}', '[': ']', '"': '"'}
         resultArgs = []
 
         currIndex = 0
         if parseBlock:
             endChar = endSymbols[argString[0]]
-            currIndex+=1
+            currIndex += 1
 
         lengthArgString = len(argString)
         remainderString = argString
         while currIndex < lengthArgString:
-            if argString[currIndex] == ' ': # ignore space
+            if argString[currIndex] == ' ':  # ignore space
                 currIndex += 1
                 continue
 
@@ -473,7 +473,7 @@ class StraceParser:
 
             assert(remainderString)
             currIndex = len(argString) - len(remainderString)
-            currIndex+=1
+            currIndex += 1
 
         return (resultArgs, remainderString)
 
@@ -492,7 +492,7 @@ class StraceParser:
         >>> parser._parseArgs('4, [{"ab, c]def", 9}, {"", 0}], 2')
         ['4', [['"ab, c]def"', '9'], ['""', '0']], '2']
         """
-        endSymbol = {'{':'}', '[':']', '"':'"'}
+        endSymbol = {'{': '}', '[': ']', '"': '"'}
         # short-cut: if there is no {, [, " in the whole argString, use split
         if all([sym not in argString for sym in endSymbol.keys()]):
             # remove the comma and space at the end of argString, then split
@@ -509,7 +509,7 @@ class StraceParser:
 
 
 if __name__ == '__main__':
-    print "running some tests..."
+    print("running some tests...")
     import doctest
     doctest.testmod()
 

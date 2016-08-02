@@ -14,7 +14,6 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
-
 class StatBase(object):
     """ The base class of stat plugins """
 

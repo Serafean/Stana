@@ -14,7 +14,8 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
-from StatBase import StatBase
+from statPlugins.StatBase import StatBase
+
 
 class VerifyParser(StatBase):
     """ For verify parser output """
@@ -38,9 +39,9 @@ class VerifyParser(StatBase):
             if "timeSpent" in result and result["timeSpent"]:
                 output += " <%d.%06d>" % (result["timeSpent"].seconds, result["timeSpent"].microseconds)
 
-        print output
-        ## Print arg for check 
-        #for arg in result["args"]:
+        print(output)
+        # Print arg for check
+        # for arg in result["args"]:
         #    print "        '%s'" % arg
 
     def printOutput(self):
