@@ -25,9 +25,15 @@ class VerifyParser(StatBase):
 
     def funcHandleALLSyscall(self, result):
         if result["type"] == "resumed":
-            output = "{0:<5} {1} <... {2} resumed> ".format(result["pid"], result["startTime"].time(), result["syscall"])
+            if "startTime" in result:
+                output = "{0:<5} {1} <... {2} resumed> ".format(result["pid"], result["startTime"].time(), result["syscall"])
+            else:
+                output = "{0:<5} <... {1} resumed> ".format(result["pid"], result["syscall"])
         else:
-            output = "{0:<5} {1} {2}(".format(result["pid"], result["startTime"].time(), result["syscall"])
+            if "startTime" in result:
+                output = "{0:<5} {1} {2}(".format(result["pid"], result["startTime"].time(), result["syscall"])
+            else:
+                output = "{0:<5} {1}(".format(result["pid"], result["syscall"])
         output += ", ".join([str(a) for a in result["args"]])
         if result["type"] == "unfinished":
             output = output + " <unfinished ...>"
