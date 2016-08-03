@@ -83,3 +83,7 @@ class StatBase(object):
         """
         pass
 
+    def getOutputObject(self):
+        """Returns a plugin specific object, usually for further processing"""
+
+        raise NotImplementedError("You'll have to implement this yourself")
