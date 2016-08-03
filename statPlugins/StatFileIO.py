@@ -15,7 +15,8 @@
 
 import sys
 
-from StatBase import StatBase
+from statPlugins.StatBase import StatBase
+
 
 class StatFileIO(StatBase):
     """ Stat and print file IO of strace"""
@@ -46,7 +47,7 @@ class StatFileIO(StatBase):
         if result["syscall"] in ["read", "write", "open", "close"]:
             if result["return"] == -1:  # ignore failed syscalls
                 return
-            
+
             if result["syscall"] == "open":
                 fid = result["return"]
             else:
@@ -59,9 +60,9 @@ class StatFileIO(StatBase):
                     filename = self._fidStatList[fid][0]
                     if filename not in self._fileStatList:
                         self._fileStatList[filename] = [1, 
-                                                        self._fidStatList[fid][1], 
-                                                        self._fidStatList[fid][2], 
-                                                        self._fidStatList[fid][3], 
+                                                        self._fidStatList[fid][1],
+                                                        self._fidStatList[fid][2],
+                                                        self._fidStatList[fid][3],
                                                         self._fidStatList[fid][4]]
                     else:
                         self._fileStatList[filename][0] += 1

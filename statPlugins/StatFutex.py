@@ -17,8 +17,8 @@ import sys
 from datetime import timedelta, datetime
 from collections import defaultdict
 
-from StatBase import StatBase
-from StatProcessTree import StatProcessTree
+from statPlugins.StatBase import StatBase
+from statPlugins.StatProcessTree import StatProcessTree
 
 
 class StatFutex(StatBase):

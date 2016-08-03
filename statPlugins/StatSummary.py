@@ -13,9 +13,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-from StatBase import StatBase
+from statPlugins.StatBase import StatBase
 from collections import defaultdict
 from datetime import timedelta
+
 
 class StatSummary(StatBase):
     """ Summarize of syscall of strace, like strace -c output"""
@@ -23,7 +24,7 @@ class StatSummary(StatBase):
     def __init__(self):
         self._syscallCount = defaultdict(int)
         self._syscallTime = defaultdict(timedelta)
-        #self._syscallErrorCount = {}
+        # self._syscallErrorCount = {}
         return
 
     def getSyscallHooks(self):
@@ -38,27 +39,25 @@ class StatSummary(StatBase):
         self._syscallCount[result["syscall"]] += 1
         if result["timeSpent"]:
             self._syscallTime[result["syscall"]] += result["timeSpent"]
-        
-
 
     def printOutput(self):
-        print "% time     seconds  usecs/call     calls syscall"
-        print "------ ----------- ----------- --------- ----------------"
+        print("% time     seconds  usecs/call     calls syscall")
+        print("------ ----------- ----------- --------- ----------------")
 
         totalCount = sum(self._syscallCount.values())
-        totalTime = reduce(lambda x,y: x+y, self._syscallTime.values())
+        totalTime = reduce(lambda x, y: x+y, self._syscallTime.values())
         for syscall in sorted(self._syscallTime, key=self._syscallTime.get,
                               reverse=True):
             percent = self._syscallTime[syscall].total_seconds() * 100 /  \
-                        totalTime.total_seconds() 
+                totalTime.total_seconds()
             usecsPerCall = self._syscallTime[syscall] / \
-                            self._syscallCount[syscall]
-            print "%6.2f %11.6f %11d %9d %s" %            \
-                  (percent, self._syscallTime[syscall].total_seconds(), 
-                   usecsPerCall.total_seconds()*(10**6), 
-                   self._syscallCount[syscall], syscall)
-            
-        print "------ ----------- ----------- --------- ----------------"
-        print "%6.2f %11.6f %11d %9d %s" % (100, totalTime.total_seconds(), 
-                totalTime.total_seconds()*(10**6) / totalCount, totalCount, "total")
+                self._syscallCount[syscall]
+            print("%6.2f %11.6f %11d %9d %s" %
+                  (percent, self._syscallTime[syscall].total_seconds(),
+                   usecsPerCall.total_seconds()*(10**6),
+                   self._syscallCount[syscall], syscall))
+
+        print("------ ----------- ----------- --------- ----------------")
+        print("%6.2f %11.6f %11d %9d %s" % (100, totalTime.total_seconds(),
+                                            totalTime.total_seconds()*(10**6) / totalCount, totalCount, "total"))
 

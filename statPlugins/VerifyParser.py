@@ -14,7 +14,8 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
-from StatBase import StatBase
+from statPlugins.StatBase import StatBase
+
 
 class VerifyParser(StatBase):
     """ For verify parser output """
@@ -24,9 +25,15 @@ class VerifyParser(StatBase):
 
     def funcHandleALLSyscall(self, result):
         if result["type"] == "resumed":
-            output = "{0:<5} {1} <... {2} resumed> ".format(result["pid"], result["startTime"].time(), result["syscall"])
+            if "startTime" in result:
+                output = "{0:<5} {1} <... {2} resumed> ".format(result["pid"], result["startTime"].time(), result["syscall"])
+            else:
+                output = "{0:<5} <... {1} resumed> ".format(result["pid"], result["syscall"])
         else:
-            output = "{0:<5} {1} {2}(".format(result["pid"], result["startTime"].time(), result["syscall"])
+            if "startTime" in result:
+                output = "{0:<5} {1} {2}(".format(result["pid"], result["startTime"].time(), result["syscall"])
+            else:
+                output = "{0:<5} {1}(".format(result["pid"], result["syscall"])
         output += ", ".join([str(a) for a in result["args"]])
         if result["type"] == "unfinished":
             output = output + " <unfinished ...>"
@@ -38,9 +45,9 @@ class VerifyParser(StatBase):
             if "timeSpent" in result and result["timeSpent"]:
                 output += " <%d.%06d>" % (result["timeSpent"].seconds, result["timeSpent"].microseconds)
 
-        print output
-        ## Print arg for check 
-        #for arg in result["args"]:
+        print(output)
+        # Print arg for check
+        # for arg in result["args"]:
         #    print "        '%s'" % arg
 
     def printOutput(self):

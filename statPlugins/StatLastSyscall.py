@@ -16,8 +16,8 @@
 from collections import deque, defaultdict
 from datetime import timedelta, datetime
 
-from StatBase import StatBase
-from StatProcessTree import StatProcessTree
+from statPlugins.StatBase import StatBase
+from statPlugins.StatProcessTree import StatProcessTree
 
 
 class StatLastSyscall(StatBase):

@@ -16,7 +16,7 @@
 
 import logging
 from collections import defaultdict
-from StatBase import StatBase
+from statPlugins.StatBase import StatBase
 
 
 class StatProcessTree(StatBase):
@@ -67,20 +67,19 @@ class StatProcessTree(StatBase):
             for childPid in childPidList:
                 headPid.remove(childPid)
 
-        print "====== Process Tree ======"
+        print("====== Process Tree ======")
         for pid in headPid:
             self._printTree(pid, 0)
-        print ""
-
+        print("")
 
     def _printTree(self, pid, indent):
         for i in xrange(0, indent):
-            print "   ",
+            print("   ")
 
         if pid in self._childExecName:
-            print "%s [%s]" % (pid, self._childExecName[pid])
+            print("%s [%s]" % (pid, self._childExecName[pid]))
         else:
-            print "%s [unknown]" % pid
+            print("%s [unknown]" % pid)
 
         for childPid in self._childDict[pid]:
             self._printTree(childPid, indent+1)
